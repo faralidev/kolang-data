@@ -2,6 +2,12 @@
 #
 # sync-vscode.sh — sync kolang-docs.json into kolang-vscode/data/kolang-docs.json
 #
+# NOTE: this script is now OPTIONAL — for manual local sync only. The VS Code
+# extension fetches kolang-docs.json itself at build time via
+# kolang-vscode/scripts/fetch-data.js (run by `npm run package` through the
+# `prepackage` hook), so there is no committed copy in kolang-vscode and no
+# drift. Use this script only if you want to regenerate the file by hand.
+#
 # The canonical file is organized as keywords / builtins / types / modules /
 # exceptions / verbs / literals. kolang-vscode's extension.js reads
 # keywords / functions / types / modules / exceptions / literals / snippets,

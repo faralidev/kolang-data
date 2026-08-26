@@ -1,8 +1,9 @@
 {
-  "_comment": "داده‌های زبانی کلنگ — منبع حقیقی برای ویرایشگرها (kolang-ide و kolang-vscode).",
+  "_comment": "داده‌های زبانی کلنگ — منبع حقیقی برای ویرایشگرها (kolang-mobile، kolang-web و kolang-vscode).",
   "_version": "0.0.1",
   "_sync": {
-    "kolang-ide": "languages/kolang/docs.js (CodeMirror Map)",
+    "kolang-mobile": "in-app reference docs (sync TBD)",
+    "kolang-web": "in-app hover docs (sync TBD)",
     "kolang-vscode": "data/kolang-docs.json (TextMate/JSON)"
   },
   "keywords": [

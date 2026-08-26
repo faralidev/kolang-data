@@ -1,0 +1,49 @@
+name: Auto-tag on merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Update keywords.json from kolang')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump _version in kolang-docs.json
+        run: |
+          node -e "const fs=require('fs');const p='kolang-docs.json';const d=JSON.parse(fs.readFileSync(p,'utf8'));const v=d._version.split('.').map(Number);v[2]=(v[2]||0)+1;d._version=v.join('.');fs.writeFileSync(p,JSON.stringify(d,null,2)+'\n')"
+
+      - name: Commit version bump
+        run: |
+          VERSION=$(node -p "JSON.parse(require('fs').readFileSync('kolang-docs.json','utf8'))._version")
+          git add kolang-docs.json
+          git commit -m "همگام‌سازی داده‌ها با کلنگ — ارتقای نسخه به v${VERSION}"
+
+      - name: Read new version
+        id: version
+        run: echo "version=v$(node -p \"JSON.parse(require('fs').readFileSync('kolang-docs.json','utf8'))._version\")" >> "$GITHUB_OUTPUT"
+
+      - name: Create tag
+        run: git tag "${{ steps.version.outputs.version }}"
+
+      - name: Push commit and tag
+        run: |
+          git push origin main
+          git push origin "${{ steps.version.outputs.version }}"
